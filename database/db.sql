@@ -1,26 +1,24 @@
-CREATE DATABASE db_links;
+CREATE DATABASE IF NOT EXISTS linksdb;
 
-USE db_links;
+USE linksdb;
 
 -- TABLE USER
--- all pasword wil be encrypted using SHA1
+-- all pasword wil be encrypted using SHA2
 CREATE TABLE users (
-  id INT(11) NOT NULL,
-  username VARCHAR(16) NOT NULL,
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  fullname VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL,
   password VARCHAR(60) NOT NULL,
-  fullname VARCHAR(100) NOT NULL
-);
+  created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+) AUTO_INCREMENT=2;
 
-ALTER TABLE users
-  ADD PRIMARY KEY (id);
-
-ALTER TABLE users
-  MODIFY id INT(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT = 2;
+-- drop table users
 
 DESCRIBE users;
 
-INSERT INTO users (id, username, password, fullname) 
-  VALUES (1, 'john', 'password1', 'John Carter');
+INSERT INTO users (id, email, password, fullname) 
+  VALUES (1, 'john', 'john@gmail.com', 'John Carter');
 
 SELECT * FROM users;
 
@@ -31,10 +29,8 @@ CREATE TABLE links (
   url VARCHAR(255) NOT NULL,
   description TEXT,
   user_id INT(11),
-  id_valor_parametro INT(11) ,
   created_at timestamp NOT NULL DEFAULT current_timestamp,
-  CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(id),
-  CONSTRAINT fk_valor_parametro FOREIGN KEY(id_valor_parametro) REFERENCES valor_parametro(id_valor_parametro)
+  CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
 ALTER TABLE links
@@ -44,36 +40,3 @@ ALTER TABLE links
   MODIFY id INT(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT = 2;
 
 DESCRIBE links;
-
-CREATE TABLE parametro (
-  id_parametro INT(11) ,
-  nombre_parametro VARCHAR(16) ,
-  estado VARCHAR(100) 
-
-);
-
-ALTER TABLE parametro
-  ADD PRIMARY KEY (id_parametro);
-
-ALTER TABLE parametro
-  MODIFY id_parametro INT(11)  AUTO_INCREMENT, AUTO_INCREMENT = 2;
-
-DESCRIBE parametro;
-
-CREATE TABLE valor_parametro (
-  id_valor_parametro INT(11) ,
-  nombre_vparametro VARCHAR(16) ,
-   orden VARCHAR(16) ,
-  estado VARCHAR(100) ,
-  id_parametro INT(11) ,
-  CONSTRAINT fk_parametro FOREIGN KEY(id_parametro) REFERENCES parametro(id_parametro)
-
-);
-
-ALTER TABLE valor_parametro
-  ADD PRIMARY KEY (id_valor_parametro);
-
-ALTER TABLE valor_parametro
-  MODIFY id_valor_parametro INT(11)  AUTO_INCREMENT, AUTO_INCREMENT = 2;
-
-DESCRIBE parametro;
